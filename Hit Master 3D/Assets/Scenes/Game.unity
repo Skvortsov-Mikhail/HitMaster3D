@@ -7493,6 +7493,7 @@ MonoBehaviour:
   - {fileID: 1173830439}
   - {fileID: 234504249}
   m_GunMuzzle: {fileID: 1304520167}
+  bul: {fileID: 4145497012993888642, guid: 1a3e418b1cce7e74bbd3fc2fa7cc2751, type: 3}
 --- !u!195 &6859287038999147245
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -7527,7 +7528,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58dbae1ee204f334893c2487eb1d6c93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CameraDepth: 10
+  m_CameraDepth: 15
 --- !u!114 &6859287038999147247
 MonoBehaviour:
   m_ObjectHideFlags: 0

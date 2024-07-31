@@ -8,9 +8,12 @@ public class Enemy : MonoBehaviour
 
     private Stage _parentStage;
 
+    private Animator _animator;
+
     private void Start()
     {
         _currentHP = m_MaxHP;
+        _animator = GetComponent<Animator>();
     }
     
     private void OnTriggerEnter(Collider other)
@@ -20,8 +23,6 @@ public class Enemy : MonoBehaviour
         if (bullet != null)
         {
             ApplyDamage(bullet.Damage);
-
-            bullet.EndLifecycle();
         }
     }
 
@@ -41,7 +42,12 @@ public class Enemy : MonoBehaviour
     {
         if (_currentHP <= 0)
         {
+            _animator.enabled = false;
+
+            GetComponent<Collider>().enabled = false;
+
             _parentStage.RemoveEnemy();
+
         }
     }
 }
