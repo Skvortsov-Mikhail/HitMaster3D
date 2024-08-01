@@ -8,18 +8,17 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Transform m_TurretPoint;
 
-    private BulletsPool _bulletsPool;
-    private StagesContainer _stagesContainer;
-
-    private NavMeshAgent _navMeshAgent;
-
-    private PlayerAnimationController _animController;
-    private LevelController _levelController;
-
     private float _timer;
     private bool _isShotPrepared;
     private bool _isCanShooting;
     public bool IsCanShooting => _isCanShooting && _isShotPrepared;
+
+    private LevelController _levelController;
+    private BulletsPool _bulletsPool;
+    private StagesContainer _stagesContainer;
+
+    private NavMeshAgent _navMeshAgent;
+    private PlayerAnimationController _animController;
 
     [Inject]
     public void Construct(LevelController levelController, BulletsPool bulletsPool, StagesContainer stagesContainer)
@@ -32,7 +31,6 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
-
         _animController = GetComponent<PlayerAnimationController>();
     }
 
@@ -43,16 +41,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (_isShotPrepared == false)
-        {
-            _timer += Time.deltaTime;
-
-            if (_timer >= m_ShootingDelay)
-            {
-                _isShotPrepared = true;
-                _timer = 0f;
-            }
-        }
+        UpdateShootingTimer();
     }
 
     public void GoToNextWayPoint()
@@ -89,5 +78,19 @@ public class Player : MonoBehaviour
         _isShotPrepared = false;
 
         _animController.Shoot();
+    }
+
+    private void UpdateShootingTimer()
+    {
+        if (_isShotPrepared == false)
+        {
+            _timer += Time.deltaTime;
+
+            if (_timer >= m_ShootingDelay)
+            {
+                _isShotPrepared = true;
+                _timer = 0f;
+            }
+        }
     }
 }

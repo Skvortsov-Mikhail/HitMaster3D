@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-public class MoveCamera : MonoBehaviour
+public class CameraMover : MonoBehaviour
 {
     [SerializeField] private Transform _cameraPivotPosition;
     [SerializeField] private float m_LerpRate;
@@ -16,6 +16,11 @@ public class MoveCamera : MonoBehaviour
     }
 
     private void Update()
+    {
+        MoveCamera();
+    }
+
+    private void MoveCamera()
     {
         transform.position = Vector3.Lerp(transform.position, _cameraPivotPosition.position, Time.deltaTime * m_LerpRate);
         transform.LookAt(_player.transform.position + Vector3.forward * m_ForwardLookingOffset);

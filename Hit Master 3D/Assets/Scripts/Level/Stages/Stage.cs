@@ -28,11 +28,12 @@ public class Stage : MonoBehaviour
     {
         _wayPoint = GetComponentInChildren<WayPoint>();
         _enemyPoints = GetComponentsInChildren<EnemyPoint>();
-        _enemiesCount = _enemyPoints.Length;
     }
 
     private void Start()
     {
+        _enemiesCount = _enemyPoints.Length;
+
         if (_enemiesCount == 0)
         {
             _isStageClear = true;
@@ -46,14 +47,6 @@ public class Stage : MonoBehaviour
         _levelController.GameStarted -= OnGameStarted;
     }
 
-    private void OnGameStarted()
-    {
-        for (int i = 0; i < _enemyPoints.Length; i++)
-        {
-            _enemiesFactory.CreateEnemy(_enemyPoints[i].transform.position, this);
-        }
-    }
-
     public void RemoveEnemy()
     {
         _enemiesCount--;
@@ -63,6 +56,14 @@ public class Stage : MonoBehaviour
             _isStageClear = true;
 
             _player.GoToNextWayPoint();
+        }
+    }
+
+    private void OnGameStarted()
+    {
+        for (int i = 0; i < _enemyPoints.Length; i++)
+        {
+            _enemiesFactory.CreateEnemy(_enemyPoints[i].transform.position, this);
         }
     }
 }

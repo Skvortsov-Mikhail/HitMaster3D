@@ -4,6 +4,7 @@ using Zenject;
 public class PlayerInputController : MonoBehaviour
 {
     [SerializeField] private float m_CameraDepth;
+
     private Player _player;
 
     [Inject]
@@ -16,13 +17,18 @@ public class PlayerInputController : MonoBehaviour
     {
         if (_player.IsCanShooting == false) return;
 
+        WaitingClick();
+    }
+
+    private void WaitingClick()
+    {
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             RaycastHit pointInfo;
 
-            if(Physics.Raycast(ray, out pointInfo))
+            if (Physics.Raycast(ray, out pointInfo))
             {
                 var target = pointInfo.point;
                 _player.Shoot(target);

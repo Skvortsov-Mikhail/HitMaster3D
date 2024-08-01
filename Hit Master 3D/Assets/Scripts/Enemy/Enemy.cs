@@ -12,11 +12,12 @@ public class Enemy : MonoBehaviour
     private float _currentHP;
 
     private LevelController _levelController;
-
     private StagesContainer _stagesContainer;
+
     private Stage _parentStage;
 
     private Animator _animator;
+    private Collider _collider;
 
     [Inject]
     public void Construct(LevelController levelController, StagesContainer stagesContainer)
@@ -28,6 +29,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+        _collider = GetComponent<Collider>();
         _currentHP = m_MaxHP;
     }
     
@@ -62,8 +64,8 @@ public class Enemy : MonoBehaviour
         if (_currentHP <= 0)
         {
             _animator.enabled = false;
+            _collider.enabled = false;
 
-            GetComponent<Collider>().enabled = false;
             GetComponent<UI_EnemyHP>().HideHPBar();
 
             _parentStage.RemoveEnemy();

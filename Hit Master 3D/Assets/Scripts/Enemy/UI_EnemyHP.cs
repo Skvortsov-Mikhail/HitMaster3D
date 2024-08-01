@@ -4,8 +4,8 @@ using UnityEngine.UI;
 public class UI_EnemyHP : MonoBehaviour
 {
     [SerializeField] private Canvas m_HPBarCanvas;
-    [SerializeField] private GameObject m_targetRotate;
 
+    [SerializeField] private GameObject m_targetRotate;
     [SerializeField] private Image m_HPBar;
 
     private Enemy _enemy;
