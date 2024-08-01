@@ -4,6 +4,8 @@ using Zenject;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private float m_ShootingDelay;
+
     [SerializeField] private Transform m_TurretPoint;
 
     private BulletsPool _bulletsPool;
@@ -14,8 +16,10 @@ public class Player : MonoBehaviour
     private PlayerAnimationController _animController;
     private LevelController _levelController;
 
+    private float _timer;
+    private bool _isShotPrepared;
     private bool _isCanShooting;
-    public bool IsCanShooting => _isCanShooting;
+    public bool IsCanShooting => _isCanShooting && _isShotPrepared;
 
     [Inject]
     public void Construct(LevelController levelController, BulletsPool bulletsPool, StagesContainer stagesContainer)
@@ -37,8 +41,24 @@ public class Player : MonoBehaviour
         _navMeshAgent.SetDestination(_stagesContainer.GetCurrentStage().WayPoint.transform.position);
     }
 
-    public void GoToNextPoint()
+    private void Update()
     {
+        if (_isShotPrepared == false)
+        {
+            _timer += Time.deltaTime;
+
+            if (_timer >= m_ShootingDelay)
+            {
+                _isShotPrepared = true;
+                _timer = 0f;
+            }
+        }
+    }
+
+    public void GoToNextWayPoint()
+    {
+        if (_stagesContainer.GetCurrentStage().IsStageClear == false) return;
+
         if (_stagesContainer.TryPerformNextStage() == false)
         {
             _levelController.EndGame();
@@ -64,7 +84,9 @@ public class Player : MonoBehaviour
         transform.LookAt(direction);
 
         var bullet = _bulletsPool.Pool.Get();
-        bullet.SetDirection(m_TurretPoint.position, direction);
+        bullet.SetNewValues(m_TurretPoint.position, direction);
+
+        _isShotPrepared = false;
 
         _animController.Shoot();
     }

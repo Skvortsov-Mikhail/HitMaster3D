@@ -8,6 +8,10 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] private float m_Speed;
 
+    [SerializeField] private float m_LifeTime;
+
+    private float _timer;
+
     private BulletsPool _bulletsPool;
     [Inject]
     public void Construct(BulletsPool bulletsPool)
@@ -17,18 +21,41 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        _bulletsPool.Pool.Release(this);
+        ReleaseBulletToPool();
     }
 
     private void Update()
+    {
+        MoveBullet();
+
+        UpdateTimer();
+    }
+
+    public void SetNewValues(Vector3 startPos, Vector3 targetPosition)
+    {
+        transform.position = startPos;
+        transform.LookAt(targetPosition);
+    }
+
+    private void ReleaseBulletToPool()
+    {
+        _timer = 0f;
+        _bulletsPool.Pool.Release(this);
+    }
+
+    private void MoveBullet()
     {
         float step = m_Speed * Time.deltaTime;
         transform.Translate(Vector3.forward * step);
     }
 
-    public void SetDirection(Vector3 startPos, Vector3 targetPosition)
+    private void UpdateTimer()
     {
-        transform.position = startPos;
-        transform.LookAt(targetPosition);
+        _timer += Time.deltaTime;
+
+        if (_timer >= m_LifeTime)
+        {
+            ReleaseBulletToPool();
+        }
     }
 }

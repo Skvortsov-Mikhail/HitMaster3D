@@ -11,14 +11,17 @@ public class Enemy : MonoBehaviour
 
     private float _currentHP;
 
-    private Stage _parentStage;
+    private LevelController _levelController;
+
     private StagesContainer _stagesContainer;
+    private Stage _parentStage;
 
     private Animator _animator;
 
     [Inject]
-    public void Construct(StagesContainer stagesContainer)
+    public void Construct(LevelController levelController, StagesContainer stagesContainer)
     {
+        _levelController = levelController;
         _stagesContainer = stagesContainer;
     }
 
@@ -45,7 +48,7 @@ public class Enemy : MonoBehaviour
 
     private void ApplyDamage(float damage)
     {
-        if (_stagesContainer.GetCurrentStage() != _parentStage) return;
+        if (_levelController.CanHitEnemiesOnOtherStages == false && _stagesContainer.GetCurrentStage() != _parentStage) return;
 
         _currentHP = Mathf.Clamp(_currentHP - damage, 0, m_MaxHP);
 

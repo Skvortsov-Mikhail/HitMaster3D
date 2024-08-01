@@ -13,6 +13,8 @@ public class Stage : MonoBehaviour
     private EnemiesFactory _enemiesFactory;
 
     private int _enemiesCount;
+    private bool _isStageClear;
+    public bool IsStageClear => _isStageClear;
 
     [Inject]
     public void Construct(LevelController levelController, Player player, EnemiesFactory enemiesFactory)
@@ -31,6 +33,11 @@ public class Stage : MonoBehaviour
 
     private void Start()
     {
+        if (_enemiesCount == 0)
+        {
+            _isStageClear = true;
+        }
+
         _levelController.GameStarted += OnGameStarted;
     }
 
@@ -53,7 +60,9 @@ public class Stage : MonoBehaviour
 
         if (_enemiesCount == 0)
         {
-            _player.GoToNextPoint();
+            _isStageClear = true;
+
+            _player.GoToNextWayPoint();
         }
     }
 }
