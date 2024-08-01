@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 public class LevelController : MonoBehaviour
@@ -18,5 +19,10 @@ public class LevelController : MonoBehaviour
         GameStarted?.Invoke();
 
         _player.GoToNextPoint();
+    }
+
+    public void EndGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

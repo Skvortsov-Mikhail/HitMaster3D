@@ -1,19 +1,31 @@
+using System;
 using UnityEngine;
+using Zenject;
 
 public class Enemy : MonoBehaviour
 {
+    public event Action<float> HPUpdated;
+
     [SerializeField] private float m_MaxHP;
+    public float MaxHP => m_MaxHP;
 
     private float _currentHP;
 
     private Stage _parentStage;
+    private StagesContainer _stagesContainer;
 
     private Animator _animator;
 
-    private void Start()
+    [Inject]
+    public void Construct(StagesContainer stagesContainer)
     {
-        _currentHP = m_MaxHP;
+        _stagesContainer = stagesContainer;
+    }
+
+    private void Awake()
+    {
         _animator = GetComponent<Animator>();
+        _currentHP = m_MaxHP;
     }
     
     private void OnTriggerEnter(Collider other)
@@ -33,7 +45,11 @@ public class Enemy : MonoBehaviour
 
     private void ApplyDamage(float damage)
     {
+        if (_stagesContainer.GetCurrentStage() != _parentStage) return;
+
         _currentHP = Mathf.Clamp(_currentHP - damage, 0, m_MaxHP);
+
+        HPUpdated?.Invoke(_currentHP);
 
         CheckDeath();
     }
@@ -45,9 +61,9 @@ public class Enemy : MonoBehaviour
             _animator.enabled = false;
 
             GetComponent<Collider>().enabled = false;
+            GetComponent<UI_EnemyHP>().HideHPBar();
 
             _parentStage.RemoveEnemy();
-
         }
     }
 }

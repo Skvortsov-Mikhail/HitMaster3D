@@ -18,12 +18,15 @@ public class PlayerInputController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            var mousePos = Input.mousePosition;
-            mousePos += Camera.main.transform.forward * m_CameraDepth;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            var direction = Camera.main.ScreenToWorldPoint(mousePos);
+            RaycastHit pointInfo;
 
-            _player.Shoot(direction);
+            if(Physics.Raycast(ray, out pointInfo))
+            {
+                var target = pointInfo.point;
+                _player.Shoot(target);
+            }
         }
     }
 }

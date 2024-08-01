@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 public class Bullet : MonoBehaviour
 {
@@ -7,28 +8,27 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] private float m_Speed;
 
-    private Vector3 _targetPosition;
+    private BulletsPool _bulletsPool;
+    [Inject]
+    public void Construct(BulletsPool bulletsPool)
+    {
+        _bulletsPool = bulletsPool;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        _bulletsPool.Pool.Release(this);
+    }
 
     private void Update()
     {
         float step = m_Speed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, _targetPosition, step);
+        transform.Translate(Vector3.forward * step);
     }
 
-    public void StartLifecycle(Vector3 startPos, Vector3 targetPos)
+    public void SetDirection(Vector3 startPos, Vector3 targetPosition)
     {
         transform.position = startPos;
-
-        SetTarget(targetPos);
-    }
-
-    public void EndLifecycle()
-    {
-
-    }
-
-    private void SetTarget(Vector3 targetPosition)
-    {
-        _targetPosition = targetPosition;
+        transform.LookAt(targetPosition);
     }
 }

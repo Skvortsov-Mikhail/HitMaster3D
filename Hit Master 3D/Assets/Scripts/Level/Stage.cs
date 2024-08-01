@@ -3,7 +3,8 @@ using Zenject;
 
 public class Stage : MonoBehaviour
 {
-    [SerializeField] private Transform m_WayPoint;
+    private WayPoint _wayPoint;
+    public WayPoint WayPoint => _wayPoint;
 
     private EnemyPoint[] _enemyPoints;
 
@@ -21,11 +22,15 @@ public class Stage : MonoBehaviour
         _enemiesFactory = enemiesFactory;
     }
 
-    private void Start()
+    private void Awake()
     {
+        _wayPoint = GetComponentInChildren<WayPoint>();
         _enemyPoints = GetComponentsInChildren<EnemyPoint>();
         _enemiesCount = _enemyPoints.Length;
+    }
 
+    private void Start()
+    {
         _levelController.GameStarted += OnGameStarted;
     }
 
