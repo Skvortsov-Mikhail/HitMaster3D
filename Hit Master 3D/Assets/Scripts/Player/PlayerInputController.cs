@@ -17,10 +17,10 @@ public class PlayerInputController : MonoBehaviour
     {
         if (_player.IsCanShooting == false) return;
 
-        WaitingClick();
+        CheckMouseClick();
     }
 
-    private void WaitingClick()
+    private void CheckMouseClick()
     {
         if (Input.GetMouseButtonDown(0))
         {
