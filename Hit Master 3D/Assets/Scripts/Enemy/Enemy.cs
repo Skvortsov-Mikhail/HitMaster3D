@@ -11,6 +11,10 @@ public class Enemy : MonoBehaviour
 
     private float _currentHP;
 
+    [Header("Sounds")]
+    [SerializeField] private AudioSource m_TakeDamageSound;
+    [SerializeField] private AudioSource m_DieSound;
+
     private LevelController _levelController;
     private StagesContainer _stagesContainer;
 
@@ -56,6 +60,8 @@ public class Enemy : MonoBehaviour
 
         HPUpdated?.Invoke(_currentHP);
 
+        m_TakeDamageSound.Play();
+
         CheckDeath();
     }
 
@@ -67,6 +73,8 @@ public class Enemy : MonoBehaviour
             _collider.enabled = false;
 
             GetComponent<UI_EnemyHP>().HideHPBar();
+
+            m_DieSound.Play();
 
             _parentStage.RemoveEnemy();
         }

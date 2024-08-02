@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
 
     private NavMeshAgent _navMeshAgent;
     private PlayerAnimationController _animController;
+    private AudioSource _audioSource;
 
     [Inject]
     public void Construct(LevelController levelController, BulletsPool bulletsPool, StagesContainer stagesContainer)
@@ -32,6 +33,7 @@ public class Player : MonoBehaviour
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _animController = GetComponent<PlayerAnimationController>();
+        _audioSource = GetComponentInChildren<AudioSource>();
     }
 
     private void Start()
@@ -78,6 +80,8 @@ public class Player : MonoBehaviour
         _isShotPrepared = false;
 
         _animController.Shoot();
+
+        _audioSource.Play();
     }
 
     private void UpdateShootingTimer()
