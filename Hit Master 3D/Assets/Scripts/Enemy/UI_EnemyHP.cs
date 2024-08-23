@@ -8,6 +8,8 @@ public class UI_EnemyHP : MonoBehaviour
     [SerializeField] private GameObject m_targetRotate;
     [SerializeField] private Image m_HPBar;
 
+    private Camera _mainCamera;
+
     private Enemy _enemy;
 
     private void Awake()
@@ -19,12 +21,16 @@ public class UI_EnemyHP : MonoBehaviour
     {
         m_HPBar.fillAmount = 1;
 
+        _mainCamera = Camera.main;
+
         _enemy.HPUpdated += OnHPUpdated;
+        _enemy.EnemyDied += OnEnemyDied;
     }
 
     private void OnDestroy()
     {
         _enemy.HPUpdated -= OnHPUpdated;
+        _enemy.EnemyDied -= OnEnemyDied;
     }
 
     private void Update()
@@ -32,14 +38,9 @@ public class UI_EnemyHP : MonoBehaviour
         RotateHPBarToCamera();
     }
 
-    public void HideHPBar()
-    {
-        m_HPBarCanvas.gameObject.SetActive(false);
-    }
-
     private void RotateHPBarToCamera()
     {
-        Vector3 toTarget = Camera.main.transform.position - transform.position;
+        Vector3 toTarget = _mainCamera.transform.position - transform.position;
 
         m_targetRotate.transform.rotation = Quaternion.LookRotation(-toTarget);
     }
@@ -49,5 +50,10 @@ public class UI_EnemyHP : MonoBehaviour
         m_HPBar.fillAmount = currentHP / _enemy.MaxHP;
 
         m_HPBar.color = Color.Lerp(Color.red, Color.green, m_HPBar.fillAmount);
+    }
+
+    private void OnEnemyDied()
+    {
+        m_HPBarCanvas.gameObject.SetActive(false);
     }
 }

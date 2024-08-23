@@ -19,7 +19,7 @@ public class BulletsPool : MonoBehaviour
 
     private void Start()
     {
-        _pool = new ObjectPool<Bullet>(createFunc: () => _diContainer.InstantiatePrefab(m_BulletPrefab).GetComponent<Bullet>(),
+        _pool = new ObjectPool<Bullet>(createFunc: () => _diContainer.InstantiatePrefabForComponent<Bullet>(m_BulletPrefab),
             actionOnGet: (obj) => obj.gameObject.SetActive(true),
             actionOnRelease: (obj) => obj.gameObject.SetActive(false),
             actionOnDestroy: (obj) => Destroy(obj),

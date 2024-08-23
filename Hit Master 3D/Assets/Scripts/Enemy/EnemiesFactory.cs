@@ -20,9 +20,9 @@ public class EnemiesFactory : MonoBehaviour
             return;
         }
 
-        var enemy = _diContainer.InstantiatePrefab(m_EnemyPrefab);
+        var enemy = _diContainer.InstantiatePrefabForComponent<Enemy>(m_EnemyPrefab);
 
         enemy.transform.position = position;
-        enemy.GetComponent<Enemy>().SetParentStage(parentStage);
+        enemy.SetParentStage(parentStage);
     }
 }

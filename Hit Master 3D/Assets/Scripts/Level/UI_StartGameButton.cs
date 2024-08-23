@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
+[RequireComponent(typeof(Button))]
 public class UI_StartGameButton : MonoBehaviour
 {
     [SerializeField] private float m_ScalingStep;

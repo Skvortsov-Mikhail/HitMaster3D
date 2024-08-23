@@ -2,9 +2,12 @@ using System;
 using UnityEngine;
 using Zenject;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Collider))]
 public class Enemy : MonoBehaviour
 {
     public event Action<float> HPUpdated;
+    public event Action EnemyDied;
 
     [SerializeField] private float m_MaxHP;
     public float MaxHP => m_MaxHP;
@@ -36,12 +39,10 @@ public class Enemy : MonoBehaviour
         _collider = GetComponent<Collider>();
         _currentHP = m_MaxHP;
     }
-    
+
     private void OnTriggerEnter(Collider other)
     {
-        var bullet = other.GetComponent<Bullet>();
-
-        if (bullet != null)
+        if (other.TryGetComponent(out Bullet bullet))
         {
             ApplyDamage(bullet.Damage);
         }
@@ -72,11 +73,11 @@ public class Enemy : MonoBehaviour
             _animator.enabled = false;
             _collider.enabled = false;
 
-            GetComponent<UI_EnemyHP>().HideHPBar();
-
             m_DieSound.Play();
 
             _parentStage.RemoveEnemy();
+
+            EnemyDied?.Invoke();
         }
     }
 }

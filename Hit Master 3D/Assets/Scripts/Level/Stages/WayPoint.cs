@@ -11,9 +11,7 @@ public class WayPoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var player = other.GetComponent<Player>();
-
-        if (player != null)
+        if (other.TryGetComponent(out Player player))
         {
             if (_parentStage.IsStageClear == true)
             {

@@ -1,9 +1,14 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
 
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(PlayerAnimationController))]
 public class Player : MonoBehaviour
 {
+    public event Action PlayerFinishLevel;
+
     [SerializeField] private float m_ShootingDelay;
 
     [SerializeField] private Transform m_TurretPoint;
@@ -13,7 +18,6 @@ public class Player : MonoBehaviour
     private bool _isCanShooting;
     public bool IsCanShooting => _isCanShooting && _isShotPrepared;
 
-    private LevelController _levelController;
     private BulletsPool _bulletsPool;
     private StagesContainer _stagesContainer;
 
@@ -22,9 +26,8 @@ public class Player : MonoBehaviour
     private AudioSource _audioSource;
 
     [Inject]
-    public void Construct(LevelController levelController, BulletsPool bulletsPool, StagesContainer stagesContainer)
+    public void Construct(BulletsPool bulletsPool, StagesContainer stagesContainer)
     {
-        _levelController = levelController;
         _bulletsPool = bulletsPool;
         _stagesContainer = stagesContainer;
     }
@@ -52,7 +55,7 @@ public class Player : MonoBehaviour
 
         if (_stagesContainer.TryPerformNextStage() == false)
         {
-            _levelController.EndGame();
+            PlayerFinishLevel?.Invoke();
             return;
         }
 

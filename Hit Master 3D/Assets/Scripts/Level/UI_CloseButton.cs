@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
+[RequireComponent(typeof(Button))]
 public class UI_CloseButton : MonoBehaviour
 {
     private LevelController _levelController;

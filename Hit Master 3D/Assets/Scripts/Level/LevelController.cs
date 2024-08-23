@@ -23,9 +23,16 @@ public class LevelController : MonoBehaviour
         GameStarted?.Invoke();
 
         _player.GoToNextWayPoint();
+
+        _player.PlayerFinishLevel += OnPlayerFinishLevel;
     }
 
-    public void EndGame()
+    private void OnDestroy()
+    {
+        _player.PlayerFinishLevel -= OnPlayerFinishLevel;
+    }
+
+    private void OnPlayerFinishLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
